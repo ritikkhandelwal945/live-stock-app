@@ -7,6 +7,7 @@ from pathlib import Path
 
 import httpx
 
+from src.data import news_sources as direct_sources
 from src.data.http import make_ssl_context, yfinance_session
 
 _CACHE_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "news_cache.json"
@@ -137,13 +138,17 @@ def _dedupe(items: list[dict], limit: int) -> list[dict]:
 def get_news_for_symbol(
     symbol: str,
     exchange: str = "NSE",
-    limit: int = 5,
+    limit: int = 8,
     refresh: bool = False,
+    company_name: str | None = None,
 ) -> list[dict]:
-    """Fetch recent news headlines for a symbol from yfinance + Google News.
+    """Fetch recent news headlines for a symbol.
 
-    Returns a list of dicts shaped for `analyze_from_items` and the
-    `NewsItem` Pydantic model.
+    Sources merged (in order):
+      1. yfinance Ticker.news (Yahoo Finance partners)
+      2. Google News RSS (aggregator over Indian sites + global)
+      3. Direct Indian RSS feeds (ET / CNBC TV18 / MoneyControl /
+         Livemint / Business Standard) — see src/data/news_sources.py
 
     Cached on disk for 30 minutes per (symbol, exchange) key.
     """
@@ -157,7 +162,15 @@ def get_news_for_symbol(
 
     yf_items = _from_yfinance(symbol, exchange, limit)
     gn_items = _from_google_news(symbol, limit)
-    merged = _dedupe(yf_items + gn_items, limit)
+    try:
+        direct_items = direct_sources.articles_matching(
+            symbol, company_name=company_name, limit=limit
+        )
+    except Exception:
+        direct_items = []
+    # Prefer direct Indian sources (ET / CNBC TV18 / Livemint / BS / MC) first,
+    # then Google News (other Indian aggregations), then yfinance (global wires).
+    merged = _dedupe(direct_items + gn_items + yf_items, limit)
 
     cache[key] = {"fetched_at": time.time(), "items": merged}
     _save_cache(cache)

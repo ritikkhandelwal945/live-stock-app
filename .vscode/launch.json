@@ -17,7 +17,7 @@
       "envFile": "${workspaceFolder}/.env",
       "env": { "PYTHONPATH": "${workspaceFolder}" },
       "justMyCode": false,
-      "console": "integratedTerminal",
+      "console": "internalConsole",
       "presentation": { "group": "1-api", "order": 2 }
     },
     {
@@ -32,7 +32,8 @@
         "--host", "0.0.0.0",
         "--port", "4200"
       ],
-      "console": "integratedTerminal",
+      "console": "internalConsole",
+      "killBehavior": "polite",
       "skipFiles": ["<node_internals>/**"],
       "presentation": { "group": "2-web", "order": 3 }
     },
@@ -46,7 +47,7 @@
       "cwd": "${workspaceFolder}",
       "envFile": "${workspaceFolder}/.env",
       "env": { "PYTHONPATH": "${workspaceFolder}" },
-      "console": "integratedTerminal",
+      "console": "internalConsole",
       "presentation": { "group": "3-cli", "order": 4 }
     }
   ],

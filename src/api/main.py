@@ -279,22 +279,30 @@ def _analyze_one(holding: Holding, days: int, refresh: bool = False) -> Recommen
         tech = tech_analyze(df)
         current_price = holding.last_price or float(df["close"].iloc[-1])
 
-        # News (cached 30min)
-        try:
-            raw_news = get_news_for_symbol(
-                holding.tradingsymbol, exchange=holding.exchange, refresh=refresh
-            )
-        except Exception:
-            raw_news = []
-        news = analyze_from_items(raw_news)
-
-        # Fundamentals (cached 24h, multi-source)
+        # Fundamentals (cached 24h, multi-source) — fetched first so we can
+        # pull the company name and pass it to direct-source news matching.
         try:
             fundamentals = get_fundamentals(
                 holding.tradingsymbol, exchange=holding.exchange, refresh=refresh
             )
         except Exception:
             fundamentals = {}
+
+        # News (cached 30min)
+        company_name = (
+            ((fundamentals.get("raw_per_source") or {}).get("yfinance") or {}).get("longName")
+            or ((fundamentals.get("raw_per_source") or {}).get("yfinance") or {}).get("shortName")
+        )
+        try:
+            raw_news = get_news_for_symbol(
+                holding.tradingsymbol,
+                exchange=holding.exchange,
+                refresh=refresh,
+                company_name=company_name,
+            )
+        except Exception:
+            raw_news = []
+        news = analyze_from_items(raw_news)
 
         # Forecasts (cheap to recompute; not cached)
         try:
