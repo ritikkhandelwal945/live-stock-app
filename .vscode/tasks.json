@@ -1,0 +1,25 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "ng-serve-wait",
+      "type": "shell",
+      "command": "until curl -sS -o /dev/null http://localhost:4200; do sleep 1; done",
+      "isBackground": false,
+      "problemMatcher": []
+    },
+    {
+      "label": "Install web deps",
+      "type": "shell",
+      "command": "npm install",
+      "options": { "cwd": "${workspaceFolder}/web" },
+      "problemMatcher": []
+    },
+    {
+      "label": "uv sync",
+      "type": "shell",
+      "command": "uv sync",
+      "problemMatcher": []
+    }
+  ]
+}

@@ -15,8 +15,14 @@ data/*.pdf
 
 # IDE
 .idea/
-.vscode/
+.vscode/*
+# but DO commit shared workspace config
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/settings.json
+!.vscode/extensions.json
 *.swp
+.claude/settings.local.json
 
 # Build
 dist/

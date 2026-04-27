@@ -1,0 +1,61 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "API only (uvicorn)",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${workspaceFolder}/.venv/bin/python",
+      "module": "uvicorn",
+      "args": [
+        "src.api.main:app",
+        "--host", "0.0.0.0",
+        "--port", "8000",
+        "--reload"
+      ],
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "env": { "PYTHONPATH": "${workspaceFolder}" },
+      "justMyCode": false,
+      "console": "integratedTerminal",
+      "presentation": { "group": "1-api", "order": 2 }
+    },
+    {
+      "name": "Web only (ng serve)",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/web",
+      "runtimeExecutable": "${workspaceFolder}/web/node_modules/.bin/ng",
+      "runtimeArgs": [
+        "serve",
+        "--proxy-config", "proxy.conf.json",
+        "--host", "0.0.0.0",
+        "--port", "4200"
+      ],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"],
+      "presentation": { "group": "2-web", "order": 3 }
+    },
+    {
+      "name": "CLI: stock-app auth (manual)",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${workspaceFolder}/.venv/bin/python",
+      "module": "src.cli",
+      "args": ["auth", "--manual"],
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "env": { "PYTHONPATH": "${workspaceFolder}" },
+      "console": "integratedTerminal",
+      "presentation": { "group": "3-cli", "order": 4 }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "▶ Run All (API + Web)",
+      "configurations": ["API only (uvicorn)", "Web only (ng serve)"],
+      "stopAll": true,
+      "presentation": { "group": "0-default", "order": 1 }
+    }
+  ]
+}

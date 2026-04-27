@@ -1,0 +1,9 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  "python.analysis.extraPaths": ["${workspaceFolder}"],
+  "remote.autoForwardPorts": true,
+  "remote.portsAttributes": {
+    "4200": { "label": "Angular UI", "onAutoForward": "openBrowser" },
+    "8000": { "label": "FastAPI", "onAutoForward": "silent" }
+  }
+}
