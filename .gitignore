@@ -1,0 +1,23 @@
+# Environment
+.env
+.venv/
+__pycache__/
+*.pyc
+
+# Data
+data/*.json
+data/*.parquet
+data/*.csv
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Build
+dist/
+*.egg-info/
+
+# Token storage
+token.json
+data/.kite_token.json

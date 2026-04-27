@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ng version *)",
+      "Bash(uv --version)",
+      "Bash(uv lock *)",
+      "Bash(./node_modules/.bin/ng build *)",
+      "Read(//etc/ssl/certs/**)",
+      "Bash(curl -sS -o /dev/null -w \"%{http_code}\\\\n\" https://api.kite.trade/)",
+      "Bash(curl -sS --cacert /etc/ssl/certs/ca-certificates.crt -o /dev/null -w \"%{http_code}\\\\n\" https://api.kite.trade/)",
+      "Bash(netstat -tlnp)",
+      "Bash(kill 28965 29682)",
+      "Bash(tee /tmp/api.log)",
+      "Bash(./node_modules/.bin/ng serve *)",
+      "Bash(tee /tmp/web.log)",
+      "Bash(curl -sS -o /dev/null -w '%{http_code}\\\\n' http://127.0.0.1:8000/api/health)",
+      "Bash(find /workspaces/rkhandelwal/projects/live-stock-app/web/src -name \"*.ts\" -type f -exec grep -l \"Directive\\\\|@Directive\" {} \\\\;)",
+      "Bash(grep -o \"mat-button::before\\\\|mat-stroked-button::before\\\\|content.*ins\\\\|content.*ar\\\\|content.*ra\\\\|content.*ur\\\\|content.*re\" /workspaces/rkhandelwal/projects/live-stock-app/web/dist/web/browser/*.js)",
+      "Bash(find /workspaces/rkhandelwal/projects/live-stock-app/web/src -type f -name \"*.ts\" -exec wc -l {} +)",
+      "Bash(xargs -r kill)",
+      "Bash(tee /tmp/api5.log)",
+      "Bash(curl -sS -o /dev/null -w '%{http_code}' http://127.0.0.1:8000/api/health)",
+      "Bash(time curl *)",
+      "Bash(python3 *)"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "github",
+    "confluence",
+    "jira",
+    "devassistant",
+    "figma",
+    "jutro",
+    "kite"
+  ]
+}
