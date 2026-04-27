@@ -1,0 +1,17 @@
+{
+  "_comment": "Copy to data/watchlist.json (committed) to customize the daily-email watchlist. Falls back to a hardcoded NIFTY 50 set if missing.",
+  "symbols": [
+    "RELIANCE",
+    "TCS",
+    "INFY",
+    "HDFCBANK",
+    "ICICIBANK",
+    "LT",
+    "BHARTIARTL",
+    "SBIN",
+    "AXISBANK",
+    "ITC",
+    "HAL",
+    "BEL"
+  ]
+}

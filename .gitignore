@@ -8,6 +8,10 @@ __pycache__/
 data/*.json
 data/*.parquet
 data/*.csv
+data/*.pdf
+# but DO commit example + the user's watchlist they want sent daily
+!data/watchlist.json.example
+!data/watchlist.json
 
 # IDE
 .idea/
