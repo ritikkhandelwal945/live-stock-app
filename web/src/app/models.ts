@@ -145,6 +145,53 @@ export interface Recommendation {
   max_drawdown_1y: number | null;
   sharpe_1y: number | null;
   beta_vs_nifty: number | null;
+
+  theme_alignment: ThemeAlignment[];
+}
+
+export interface ThemeAlignment {
+  theme: string;
+  label: string;
+  emoji: string;
+  side: 'positive' | 'negative';
+  article_count: number;
+}
+
+export interface MacroThemeStock {
+  symbol: string;
+  sector: string;
+  name: string | null;
+  in_portfolio: boolean;
+}
+
+export interface MacroThemeArticle {
+  headline: string;
+  source: string;
+  url: string;
+  published_at: string | null;
+}
+
+export interface MacroTheme {
+  theme: string;
+  label: string;
+  emoji: string;
+  source: 'rule_based' | 'gemini';
+  score: number;
+  article_count: number;
+  matched_articles: MacroThemeArticle[];
+  sectors_positive: string[];
+  sectors_negative: string[];
+  impacted_positive: MacroThemeStock[];
+  impacted_negative: MacroThemeStock[];
+  summary?: string;
+  confidence?: string;
+}
+
+export interface MacroResult {
+  themes: MacroTheme[];
+  sources_used: string[];
+  article_count: number;
+  generated_at: string;
 }
 
 export interface BulkDeal {

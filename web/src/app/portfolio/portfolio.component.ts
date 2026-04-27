@@ -219,6 +219,17 @@ const ANALYSIS_TEMPLATE = `
     </ul>
   </ng-container>
 
+  <ng-container *ngIf="r.theme_alignment?.length">
+    <h3 style="margin-top:24px; margin-bottom:8px;">Macro themes affecting this stock</h3>
+    <div style="display:flex; flex-wrap:wrap; gap:6px;">
+      <span *ngFor="let ta of r.theme_alignment"
+            class="action-chip"
+            [style.background]="ta.side === 'positive' ? '#2e7d32' : '#c62828'">
+        {{ ta.emoji }} {{ ta.label }} · {{ ta.side === 'positive' ? 'tailwind' : 'headwind' }}
+      </span>
+    </div>
+  </ng-container>
+
   <ng-container *ngIf="r.bulk_deals_30d?.length || r.insider_trades_30d?.length">
     <h3 style="margin-top:24px; margin-bottom:8px;">Institutional activity (30d)</h3>
     <p class="muted" style="font-size:11px; margin-top:0;">

@@ -45,6 +45,14 @@ import { MatIconModule } from '@angular/material/icon';
         <mat-icon>local_fire_department</mat-icon>
         Discover
       </a>
+      <a
+        mat-button
+        routerLink="/macro"
+        routerLinkActive="active-link"
+      >
+        <mat-icon>public</mat-icon>
+        Macro
+      </a>
     </mat-toolbar>
     <router-outlet />
   `,

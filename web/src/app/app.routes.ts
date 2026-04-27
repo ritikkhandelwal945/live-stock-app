@@ -19,5 +19,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./discover/discover.component').then((m) => m.DiscoverComponent),
   },
+  {
+    path: 'macro',
+    loadComponent: () =>
+      import('./macro/macro.component').then((m) => m.MacroComponent),
+  },
   { path: '**', redirectTo: 'portfolio' },
 ];

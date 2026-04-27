@@ -138,6 +138,8 @@ class Recommendation(BaseModel):
     operating_margin_history: list[float] = []        # annual %, oldest→newest
     sales_cagr_5y: float | None = None
     profit_cagr_5y: float | None = None
+    # Macro theme alignment (positive/negative from active news themes)
+    theme_alignment: list[dict] = []
     # Smart-money signals
     bulk_deals_30d: list[dict] = []
     insider_trades_30d: list[dict] = []

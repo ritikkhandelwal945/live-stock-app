@@ -18,6 +18,7 @@ from src.client.models import Holding, Position, Recommendation
 from src.analysis.historical_metrics import compute as compute_historical
 from src.data.company_info import get_company_info
 from src.data.fundamentals import get_fundamentals
+from src.data.macro import get_active_themes
 from src.data.news_provider import get_news_for_symbol
 from src.data.smart_money import get_smart_money
 from src.data.yf_provider import get_history, get_quote
@@ -327,6 +328,12 @@ def _analyze_one(holding: Holding, days: int, refresh: bool = False) -> Recommen
         except Exception:
             historical = {}
 
+        # Macro theme alignment (1h cache)
+        try:
+            active_themes = (get_active_themes() or {}).get("themes", [])
+        except Exception:
+            active_themes = []
+
         rec = score_stock(
             holding.tradingsymbol,
             current_price,
@@ -338,6 +345,7 @@ def _analyze_one(holding: Holding, days: int, refresh: bool = False) -> Recommen
             forecast_12m=f12,
             smart_money=sm,
             historical=historical,
+            active_themes=active_themes,
         )
         # Enrich with company info (cheap, 7-day cache)
         try:
@@ -405,6 +413,12 @@ def discover(
 ) -> dict:
     from src.api.discover import screen_universe
     return screen_universe(index=universe, deep_analyze_top=top, refresh=refresh)
+
+
+@app.get("/api/macro")
+def macro(refresh: bool = Query(False)) -> dict:
+    """Returns active macro themes (rule-based + optional Gemini)."""
+    return get_active_themes(refresh=refresh)
 
 
 @app.get("/api/daily")

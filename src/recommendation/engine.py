@@ -7,6 +7,7 @@ from src.client.models import (
     Recommendation,
     TargetEntry,
 )
+from src.data.macro.themes import theme_alignment_for_stock
 
 
 WEIGHTS = {
@@ -248,6 +249,7 @@ def score_stock(
     forecast_12m: dict | None = None,
     smart_money: dict | None = None,
     historical: dict | None = None,
+    active_themes: list[dict] | None = None,
 ) -> Recommendation:
     if fundamental is None or len(fundamental.metrics) == 0:
         # Build a fundamental signal from the cross-source payload if available.
@@ -342,6 +344,23 @@ def score_stock(
     elif isinstance(one_y, (int, float)) and one_y <= -20:
         risks.append(f"1Y price return {one_y:+.0f}% — sustained underperformance")
     yf_raw = (fp.get("raw_per_source") or {}).get("yfinance") or {}
+    # Macro theme alignment: if any of the active themes' positive/negative
+    # sectors include this stock, surface as a reason or risk.
+    stock_sector = (yf_raw.get("industry") or yf_raw.get("sector") or "")
+    theme_alignment = theme_alignment_for_stock(stock_sector, active_themes or [])
+    for ta in theme_alignment:
+        emoji = ta.get("emoji", "")
+        label = ta.get("label", "")
+        n_articles = ta.get("article_count", 0)
+        if ta["side"] == "positive":
+            reasons.append(
+                f"{emoji} {label} theme active ({n_articles} articles in last 24h) — sector tailwind"
+            )
+        else:
+            risks.append(
+                f"{emoji} {label} theme active ({n_articles} articles) — sector headwind"
+            )
+
     sc_payload = (fp.get("raw_per_source") or {}).get("screener") or {}
     promoter_block = sc_payload.get("promoter") or {}
     opm_quarterly = sc_payload.get("opm_quarterly") or []
@@ -422,6 +441,7 @@ def score_stock(
         operating_margin_history=opm_annual or [],
         sales_cagr_5y=(sales_growth_block.get("5 Years") if isinstance(sales_growth_block, dict) else None),
         profit_cagr_5y=(profit_growth_block.get("5 Years") if isinstance(profit_growth_block, dict) else None),
+        theme_alignment=theme_alignment,
         bulk_deals_30d=bulk_30d,
         insider_trades_30d=sm.get("insider_trades_30d", []),
         corporate_actions=(sm.get("events", {}) or {}).get("corporate_actions", []),

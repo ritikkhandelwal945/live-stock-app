@@ -2,7 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { AuthStatus, DiscoverResult, HoldingsResponse, Position, Recommendation, UploadResult } from './models';
+import {
+  AuthStatus,
+  DiscoverResult,
+  HoldingsResponse,
+  MacroResult,
+  Position,
+  Recommendation,
+  UploadResult,
+} from './models';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -59,5 +67,11 @@ export class ApiService {
 
   universes(): Observable<{ groups: { label: string; indices: string[] }[] }> {
     return this.http.get<{ groups: { label: string; indices: string[] }[] }>(`${this.base}/universes`);
+  }
+
+  macro(refresh = false): Observable<MacroResult> {
+    return this.http.get<MacroResult>(`${this.base}/macro`, {
+      params: { refresh: String(refresh) },
+    });
   }
 }
